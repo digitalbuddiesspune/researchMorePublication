@@ -1,14 +1,17 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import { createApp } from './src/app.js'
+import { connectDatabase } from './src/config/db.js'
+import { env } from './src/config/env.js'
 
-dotenv.config();
-const app = express();
-const PORT = process.env.PORT || 3000;
+const startServer = async () => {
+  await connectDatabase()
+  const app = createApp()
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+  app.listen(env.PORT, () => {
+    console.log(`Backend API running on http://localhost:${env.PORT}`)
+  })
+}
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer().catch((error) => {
+  console.error('Failed to start backend:', error.message)
+  process.exit(1)
+})

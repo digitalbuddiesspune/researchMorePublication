@@ -1,3 +1,13 @@
+// Video thumbnail: open science / research (Unsplash)
+const VIDEO_THUMB =
+  'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80'
+
+const FALLBACK_VIDEO_THUMB =
+  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80'
+
+const buildVideoBackground = (imageUrl) =>
+  `url(${imageUrl || FALLBACK_VIDEO_THUMB}), url(${FALLBACK_VIDEO_THUMB})`
+
 export default function OpenScienceSection() {
   return (
     <section className="bg-white">
@@ -20,9 +30,12 @@ export default function OpenScienceSection() {
         </div>
 
         <div className="overflow-hidden rounded-2xl bg-white shadow-md shadow-neutral-200">
-          <div className="relative aspect-video w-full">
-            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-400" />
-            <button className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="relative aspect-video w-full bg-neutral-200 bg-cover bg-center"
+            style={{ backgroundImage: buildVideoBackground(VIDEO_THUMB) }}
+          >
+            <div className="absolute inset-0 bg-black/30" />
+            <button className="absolute inset-0 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2">
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-neutral-400/60">
                 <span className="ml-1 inline-block border-y-[10px] border-l-[16px] border-y-transparent border-l-emerald-600" />
               </span>

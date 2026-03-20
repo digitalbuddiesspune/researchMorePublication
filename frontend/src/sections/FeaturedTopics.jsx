@@ -1,3 +1,29 @@
+// Science/research-themed images (Unsplash)
+const TOPIC_IMAGES = {
+  'fractals-climate':
+    'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
+  'toxic-algal-blooms':
+    'https://images.unsplash.com/photo-1559827263-247faa2f3dc1?w=600&q=80',
+  'neural-deep-sea':
+    'https://images.unsplash.com/photo-1582719471384-894f522a3b2f?w=600&q=80',
+  'future-coral-reefs':
+    'https://images.unsplash.com/photo-1532187649962-549a911349c2?w=600&q=80',
+}
+
+const TOPIC_FALLBACK_IMAGES = {
+  'fractals-climate':
+    'https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=600&q=80',
+  'toxic-algal-blooms':
+    'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=600&q=80',
+  'neural-deep-sea':
+    'https://images.unsplash.com/photo-1498623116890-37e912163d5d?w=600&q=80',
+  'future-coral-reefs':
+    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80',
+}
+
+const buildTopicBackground = (imageUrl, fallbackImage) =>
+  `url(${imageUrl || fallbackImage}), url(${fallbackImage})`
+
 const DEFAULT_TOPICS = [
   {
     id: 'fractals-climate',
@@ -33,7 +59,16 @@ export default function FeaturedTopics({ topics = DEFAULT_TOPICS, onTopicClick }
               onClick={() => onTopicClick?.(topic)}
               className="group flex flex-col overflow-hidden rounded-xl bg-white text-left shadow-sm ring-1 ring-neutral-200 transition hover:-translate-y-0.5 hover:shadow-md hover:ring-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
-              <div className="h-32 w-full bg-gradient-to-tr from-emerald-500/60 via-sky-500/60 to-indigo-500/60" />
+              <div
+                className="h-32 w-full bg-neutral-200 bg-cover bg-center"
+                style={{
+                  backgroundImage: buildTopicBackground(
+                    TOPIC_IMAGES[topic.id],
+                    TOPIC_FALLBACK_IMAGES[topic.id] ??
+                      TOPIC_FALLBACK_IMAGES['fractals-climate']
+                  ),
+                }}
+              />
               <div className="flex flex-1 flex-col gap-2 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">
                   Research Topic
