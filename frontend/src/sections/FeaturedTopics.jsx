@@ -51,7 +51,7 @@ export default function FeaturedTopics({ topics = DEFAULT_TOPICS, onTopicClick }
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-12 lg:px-0">
-        <div className="grid gap-6 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {topics.map((topic) => (
             <button
               key={topic.id}
