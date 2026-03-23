@@ -46,13 +46,15 @@ export default function Header() {
     : 'transition-colors hover:text-neutral-900 text-neutral-700'
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-20 transition-colors duration-300 ${headerClasses}`}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-0">
-        <Link to="/" className="flex items-center gap-2">
+    <header className={`fixed inset-x-0 top-0 z-20 backdrop-blur-sm transition-colors duration-300 ${headerClasses}`}>
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-0">
+        <Link to="/" className="flex min-w-0 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-xs font-bold uppercase tracking-tight text-white">
             RM
           </div>
-          <span className="text-lg font-semibold tracking-tight">{SITE_NAME}</span>
+          <span className="max-w-[150px] truncate text-sm font-semibold tracking-tight sm:max-w-none sm:text-lg">
+            {SITE_NAME}
+          </span>
         </Link>
         <nav
           className="hidden items-center gap-8 text-sm font-medium md:flex"
@@ -78,19 +80,19 @@ export default function Header() {
             Submit your research
           </button>
         </nav>
-        <div className="flex items-center gap-6 text-sm font-medium">
-          <button className={`hidden sm:inline ${utilLinkClasses}`}>Search</button>
-          <Link to="/login" className={utilLinkClasses}>
+        <div className="flex items-center gap-2 text-sm font-medium sm:gap-5">
+          <button className={`hidden md:inline ${utilLinkClasses}`}>Search</button>
+          <Link to="/login" className={`hidden sm:inline ${utilLinkClasses}`}>
             Login
           </Link>
           <button
             type="button"
-            className={`${utilLinkClasses} inline-flex h-9 items-center justify-center gap-2 rounded-md border border-current/25 px-3 md:hidden`}
+            className={`${utilLinkClasses} inline-flex h-8 items-center justify-center gap-2 rounded-md border border-current/25 px-2.5 text-xs sm:h-9 sm:px-3 sm:text-sm md:hidden`}
             onClick={() => setMobileMenuOpen((open) => !open)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-menu"
           >
-            <span className="text-xs font-semibold uppercase tracking-[0.12em]">Menu</span>
+            <span className="font-semibold uppercase tracking-[0.12em]">Menu</span>
             <span className="text-lg leading-none">{mobileMenuOpen ? 'x' : '⋮'}</span>
           </button>
         </div>
@@ -132,10 +134,10 @@ export default function Header() {
       <div
         id="mobile-nav-menu"
         className={`overflow-hidden border-t border-neutral-200 bg-white text-neutral-800 shadow-lg transition-all duration-300 md:hidden ${
-          mobileMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0'
+          mobileMenuOpen ? 'max-h-[calc(100vh-56px)] opacity-100 sm:max-h-[calc(100vh-64px)]' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="mx-auto max-w-6xl space-y-2 px-5 py-4 lg:px-0">
+        <div className="mx-auto max-w-6xl space-y-2 overflow-y-auto px-4 py-4 sm:px-5 lg:px-0">
           <button
             type="button"
             className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-3 py-2 text-left text-sm font-semibold text-neutral-900"
@@ -152,10 +154,10 @@ export default function Header() {
           </button>
           <div
             className={`overflow-hidden transition-all duration-300 ${
-              mobileAboutOpen ? 'max-h-[640px] opacity-100' : 'max-h-0 opacity-0'
+              mobileAboutOpen ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
-            <div className="space-y-4 px-2 pb-2 pt-2">
+            <div className="space-y-4 overflow-y-auto px-2 pb-2 pt-2">
             {ABOUT_GROUPS.map((group) => (
               <div key={group.title} className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-500">
@@ -200,6 +202,13 @@ export default function Header() {
           >
             All articles
           </button>
+          <Link
+            to="/login"
+            onClick={closeMobileMenu}
+            className="block w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+          >
+            Login
+          </Link>
           <button className="mt-2 w-full rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400">
             Submit your research
           </button>
