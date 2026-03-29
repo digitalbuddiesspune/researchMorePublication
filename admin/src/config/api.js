@@ -1,1 +1,3 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { config } from 'dotenv'
+config()
+export const API_V1_URL = process.env.VITE_API_URL; 

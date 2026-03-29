@@ -11,7 +11,7 @@ const buildVideoBackground = (imageUrl) =>
 export default function OpenScienceSection() {
   return (
     <section className="bg-white">
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:px-0">
+      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:px-0">
         <div className="space-y-4">
           <h2 className="text-2xl font-semibold text-neutral-900">
             Why open science is essential for our future

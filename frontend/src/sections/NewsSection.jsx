@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { getPublishedNewsUrl } from '../config/api.js'
 
 // News-related images (Unsplash): science, nature, research
 const NEWS_IMAGES = {
@@ -120,7 +119,7 @@ export default function NewsSection() {
   useEffect(() => {
     const loadNews = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/news?published=true`)
+        const response = await fetch(getPublishedNewsUrl())
         if (!response.ok) return
         const payload = await response.json()
         if (!Array.isArray(payload) || payload.length === 0) return
@@ -156,7 +155,7 @@ export default function NewsSection() {
 
   return (
     <section className="bg-neutral-50">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-0">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-0">
         <h2 className="text-2xl font-semibold text-neutral-900">News</h2>
         <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <article className="overflow-hidden rounded-2xl bg-white shadow-sm shadow-neutral-200">

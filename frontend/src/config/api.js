@@ -1,0 +1,5 @@
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+export const API_V1_URL = `${API_BASE_URL}/api/v1`
+
+/** Matches backend `GET /api/v1/news` (newsRoutes). */
+export const getPublishedNewsUrl = () => `${API_V1_URL}/news?published=true`

@@ -3,7 +3,7 @@ const TABS = ['Articles', 'Latest research', 'Collections']
 export default function ContentTabs({ activeTab, onTabChange }) {
   return (
     <div className="border-b border-neutral-200 bg-white/95">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 lg:px-0">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-0">
         <div className="flex gap-6 text-sm font-medium text-neutral-700">
           {TABS.map((tab) => {
             const isActive = tab === activeTab

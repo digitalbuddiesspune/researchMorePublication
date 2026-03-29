@@ -47,24 +47,50 @@ body {
   letter-spacing: 0.02em;
 }
 
-.sidebar nav {
+.sidebar-nav {
   display: grid;
   gap: 8px;
 }
 
-.sidebar a {
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #cbd5e1;
   text-decoration: none;
   padding: 10px 12px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.sidebar a.active,
-.sidebar a:hover {
+.sidebar-nav__icon {
+  display: flex;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.sidebar-nav__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar-nav a.active,
+.sidebar-nav a:hover {
   color: #ffffff;
   background: #1e293b;
   transform: translateX(2px);
+}
+
+.sidebar-nav a.active .sidebar-nav__icon,
+.sidebar-nav a:hover .sidebar-nav__icon {
+  color: #e2e8f0;
+}
+
+.sidebar-nav a.active .sidebar-nav__icon {
+  color: #ffffff;
 }
 
 .sidebar-note {

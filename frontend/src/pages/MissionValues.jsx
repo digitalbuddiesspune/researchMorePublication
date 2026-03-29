@@ -14,7 +14,7 @@ export default function MissionValues() {
   return (
     <>
       <section className="bg-white pt-24">
-        <div className="mx-auto max-w-6xl px-6 py-10 lg:px-0">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-0">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_240px]">
             <article className="space-y-10">
               <header className="space-y-4">

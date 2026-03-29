@@ -47,7 +47,7 @@ export default function Header() {
 
   return (
     <header className={`fixed inset-x-0 top-0 z-20 backdrop-blur-sm transition-colors duration-300 ${headerClasses}`}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-0">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-0">
         <Link to="/" className="flex min-w-0 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-xs font-bold uppercase tracking-tight text-white">
             RM
@@ -106,7 +106,7 @@ export default function Header() {
         onMouseEnter={() => setAboutOpen(true)}
         onMouseLeave={() => setAboutOpen(false)}
       >
-        <div className="mx-auto max-w-6xl px-6 py-8 lg:px-0">
+        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-0">
           <div className="grid gap-8 md:grid-cols-5">
             {ABOUT_GROUPS.map((group) => (
               <div key={group.title} className="space-y-3">
@@ -137,7 +137,7 @@ export default function Header() {
           mobileMenuOpen ? 'max-h-[calc(100vh-56px)] opacity-100 sm:max-h-[calc(100vh-64px)]' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="mx-auto max-w-6xl space-y-2 overflow-y-auto px-4 py-4 sm:px-5 lg:px-0">
+        <div className="mx-auto max-w-7xl space-y-2 overflow-y-auto px-4 py-4 sm:px-5 lg:px-0">
           <button
             type="button"
             className="flex w-full items-center justify-between rounded-md bg-neutral-100 px-3 py-2 text-left text-sm font-semibold text-neutral-900"

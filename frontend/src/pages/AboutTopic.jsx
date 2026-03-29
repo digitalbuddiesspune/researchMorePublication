@@ -12,7 +12,7 @@ export default function AboutTopic() {
   if (!page) {
     return (
       <section className="bg-white pt-24">
-        <div className="mx-auto max-w-6xl px-6 py-16 lg:px-0">
+        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-0">
           <h1 className="text-3xl font-semibold text-neutral-900">Page not found</h1>
           <p className="mt-3 text-sm text-neutral-700">
             The requested About page does not exist.
@@ -37,7 +37,7 @@ export default function AboutTopic() {
   return (
     <>
       <section className="bg-white pt-20 sm:pt-24">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-0">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-0">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
             <article className="space-y-10">
               <header className="space-y-4">
