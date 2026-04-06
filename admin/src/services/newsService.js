@@ -1,13 +1,14 @@
 import { API_V1_URL } from '../config/api'
+import { authFetch } from './authService'
 
 export const fetchNews = async () => {
-  const response = await fetch(`${API_V1_URL}/news`)
+  const response = await authFetch(`${API_V1_URL}/news`)
   if (!response.ok) throw new Error('Failed to load news')
   return response.json()
 }
 
 export const createNews = async (payload) => {
-  const response = await fetch(`${API_V1_URL}/create-news`, {
+  const response = await authFetch(`${API_V1_URL}/create-news`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -19,7 +20,7 @@ export const createNews = async (payload) => {
 }
 
 export const updateNews = async (id, payload) => {
-  const response = await fetch(`${API_V1_URL}/update-news/${id}`, {
+  const response = await authFetch(`${API_V1_URL}/update-news/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -31,6 +32,6 @@ export const updateNews = async (id, payload) => {
 }
 
 export const removeNews = async (id) => {
-  const response = await fetch(`${API_V1_URL}/delete-news/${id}`, { method: 'DELETE' })
+  const response = await authFetch(`${API_V1_URL}/delete-news/${id}`, { method: 'DELETE' })
   if (!response.ok) throw new Error('Delete failed')
 }

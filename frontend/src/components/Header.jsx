@@ -1,15 +1,28 @@
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ABOUT_GROUPS } from '../data/aboutPages.js'
+import {
+  ADMIN_APP_URL,
+  EDITOR_APP_URL,
+  REVIEWER_APP_URL,
+  getPublicSettingsUrl,
+} from '../config/api.js'
+import { clearWebToken, fetchMe, getWebToken } from '../services/authService.js'
 
 const SITE_NAME = 'researchMorePublication'
+const NOTICE_REFRESH_MS = 15000
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false)
+  const [platformNotice, setPlatformNotice] = useState('')
+  const [currentUser, setCurrentUser] = useState(null)
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+  const profileMenuRef = useRef(null)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,15 +35,103 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
+    const resolveSession = async () => {
+      try {
+        if (!getWebToken()) {
+          setCurrentUser(null)
+          return
+        }
+        const payload = await fetchMe()
+        setCurrentUser(payload.user || null)
+      } catch {
+        clearWebToken()
+        setCurrentUser(null)
+      }
+    }
+    resolveSession()
+  }, [location.pathname])
+
+  useEffect(() => {
     setAboutOpen(false)
     setMobileMenuOpen(false)
     setMobileAboutOpen(false)
+    setProfileMenuOpen(false)
   }, [location.pathname])
+
+  useEffect(() => {
+    if (!profileMenuOpen) return
+    const closeOnClickOutside = (event) => {
+      if (!profileMenuRef.current) return
+      if (!profileMenuRef.current.contains(event.target)) {
+        setProfileMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', closeOnClickOutside)
+    return () => document.removeEventListener('mousedown', closeOnClickOutside)
+  }, [profileMenuOpen])
+
+  useEffect(() => {
+    let isMounted = true
+    const loadNotice = async (signal) => {
+      try {
+        const response = await fetch(getPublicSettingsUrl(), { signal })
+        if (!response.ok) return
+        const payload = await response.json()
+        if (isMounted) setPlatformNotice(payload.platformNotice || '')
+      } catch {
+        // Intentionally ignore on public header load.
+      }
+    }
+
+    let controller = new AbortController()
+    loadNotice(controller.signal)
+
+    const intervalId = window.setInterval(() => {
+      controller.abort()
+      controller = new AbortController()
+      loadNotice(controller.signal)
+    }, NOTICE_REFRESH_MS)
+
+    return () => {
+      isMounted = false
+      controller.abort()
+      window.clearInterval(intervalId)
+    }
+  }, [])
 
   const onHero = location.pathname === '/' && !scrolled
   const closeMobileMenu = () => {
     setMobileMenuOpen(false)
     setMobileAboutOpen(false)
+  }
+
+  const openRoleWorkspace = () => {
+    if (!currentUser) {
+      navigate('/login')
+      return
+    }
+    if (currentUser.role === 'author') {
+      navigate('/author/dashboard')
+      return
+    }
+    if (currentUser.role === 'admin') {
+      window.location.href = ADMIN_APP_URL
+      return
+    }
+    if (currentUser.role === 'reviewer') {
+      window.location.href = REVIEWER_APP_URL
+      return
+    }
+    if (currentUser.role === 'editor') {
+      window.location.href = EDITOR_APP_URL
+    }
+  }
+
+  const logout = () => {
+    clearWebToken()
+    setCurrentUser(null)
+    setProfileMenuOpen(false)
+    navigate('/login', { replace: true })
   }
 
   const headerClasses = onHero
@@ -44,9 +145,15 @@ export default function Header() {
   const utilLinkClasses = onHero
     ? 'transition-colors hover:text-white text-white/80'
     : 'transition-colors hover:text-neutral-900 text-neutral-700'
+  const submitTarget = currentUser?.role === 'author' ? '/author/dashboard' : '/login?next=/author/dashboard'
 
   return (
     <header className={`fixed inset-x-0 top-0 z-20 backdrop-blur-sm transition-colors duration-300 ${headerClasses}`}>
+      {platformNotice ? (
+        <div className="bg-amber-100 px-4 py-1 text-center text-xs font-medium text-amber-900 sm:text-sm">
+          {platformNotice}
+        </div>
+      ) : null}
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-0">
         <Link to="/" className="flex min-w-0 items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-xs font-bold uppercase tracking-tight text-white">
@@ -70,21 +177,99 @@ export default function Header() {
           >
             About us
           </button>
-          <button className={navLinkClasses} onMouseEnter={() => setAboutOpen(false)}>
+          <Link to="/journals" className={navLinkClasses} onMouseEnter={() => setAboutOpen(false)}>
             All journals
-          </button>
-          <button className={navLinkClasses} onMouseEnter={() => setAboutOpen(false)}>
+          </Link>
+          <Link to="/articles" className={navLinkClasses} onMouseEnter={() => setAboutOpen(false)}>
             All articles
-          </button>
-          <button className="rounded-full bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400">
+          </Link>
+          <Link
+            to={submitTarget}
+            className="rounded-full bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400"
+          >
             Submit your research
-          </button>
+          </Link>
         </nav>
         <div className="flex items-center gap-2 text-sm font-medium sm:gap-5">
           <button className={`hidden md:inline ${utilLinkClasses}`}>Search</button>
-          <Link to="/login" className={`hidden sm:inline ${utilLinkClasses}`}>
-            Login
-          </Link>
+          {currentUser ? (
+            <div ref={profileMenuRef} className="relative hidden items-center gap-2 sm:flex">
+              <button
+                type="button"
+                onClick={() => setProfileMenuOpen((prev) => !prev)}
+                className={`${utilLinkClasses} inline-flex h-10 w-10 items-center justify-center rounded-full border border-current/30 bg-neutral-900 text-xs font-bold uppercase text-white`}
+                title={currentUser.name || 'Profile'}
+              >
+                {(currentUser.name || 'U').slice(0, 1)}
+              </button>
+              {profileMenuOpen ? (
+                <div className="absolute right-0 top-12 z-50 w-72 overflow-hidden rounded-2xl border border-neutral-200 bg-white text-neutral-900 shadow-xl">
+                  <div className="flex items-center gap-3 border-b border-neutral-200 p-4">
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold uppercase text-white">
+                      {(currentUser.name || 'U').slice(0, 1)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-semibold">{currentUser.name || 'User'}</p>
+                      <p className="truncate text-sm text-neutral-500">{currentUser.email || ''}</p>
+                    </div>
+                  </div>
+                  <div className="p-2 text-sm">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileMenuOpen(false)
+                        navigate('/my-profile')
+                      }}
+                      className="block w-full rounded-md px-3 py-2 text-left hover:bg-neutral-100"
+                    >
+                      My profile
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileMenuOpen(false)
+                        navigate('/my-workspace')
+                      }}
+                      className="block w-full rounded-md px-3 py-2 text-left hover:bg-neutral-100"
+                    >
+                      My workspace
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileMenuOpen(false)
+                        navigate('/settings-privacy')
+                      }}
+                      className="block w-full rounded-md px-3 py-2 text-left hover:bg-neutral-100"
+                    >
+                      Settings & Privacy
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileMenuOpen(false)
+                        navigate('/help-center')
+                      }}
+                      className="block w-full rounded-md px-3 py-2 text-left hover:bg-neutral-100"
+                    >
+                      Help center
+                    </button>
+                    <button
+                      type="button"
+                      onClick={logout}
+                      className="mt-1 block w-full rounded-md px-3 py-2 text-left text-red-600 hover:bg-red-50"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <Link to="/login" className={`hidden sm:inline ${utilLinkClasses}`}>
+              Login
+            </Link>
+          )}
           <button
             type="button"
             className={`${utilLinkClasses} inline-flex h-8 items-center justify-center gap-2 rounded-md border border-current/25 px-2.5 text-xs sm:h-9 sm:px-3 sm:text-sm md:hidden`}
@@ -184,34 +369,59 @@ export default function Header() {
             ))}
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              setMobileAboutOpen(false)
-            }}
+          <Link
+            to="/journals"
+            onClick={closeMobileMenu}
             className="w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
           >
             All journals
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMobileAboutOpen(false)
-            }}
+          </Link>
+          <Link
+            to="/articles"
+            onClick={closeMobileMenu}
             className="w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
           >
             All articles
-          </button>
-          <Link
-            to="/login"
-            onClick={closeMobileMenu}
-            className="block w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
-          >
-            Login
           </Link>
-          <button className="mt-2 w-full rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400">
+          {currentUser ? (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu()
+                  openRoleWorkspace()
+                }}
+                className="block w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+              >
+                My workspace
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu()
+                  logout()
+                }}
+                className="block w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={closeMobileMenu}
+              className="block w-full rounded-md px-2 py-2 text-left text-sm text-neutral-700 hover:bg-neutral-100"
+            >
+              Login
+            </Link>
+          )}
+          <Link
+            to={submitTarget}
+            onClick={closeMobileMenu}
+            className="mt-2 block w-full rounded-full bg-emerald-500 px-4 py-2 text-center text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400"
+          >
             Submit your research
-          </button>
+          </Link>
         </div>
       </div>
 

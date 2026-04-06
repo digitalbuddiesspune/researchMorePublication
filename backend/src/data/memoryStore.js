@@ -3,12 +3,24 @@ import crypto from 'crypto'
 const now = new Date().toISOString()
 
 export const memoryStore = {
+  users: [
+    {
+      _id: crypto.randomUUID(),
+      name: 'Reviewer User',
+      email: 'reviewer@researchmorepublication.com',
+      passwordHash: '$2b$10$ZtabNQJajjVmHv4nr.9GeeEjs9dby7UCwNByuA2eHdkcDhdhBWDV2',
+      role: 'reviewer',
+      status: 'active',
+      createdAt: now,
+      updatedAt: now,
+    },
+  ],
   publications: [
     {
       _id: crypto.randomUUID(),
       title: 'Ocean biodiversity and AI mapping',
       author: 'Dr. Elena Park',
-      status: 'in-review',
+      status: 'accepted',
       category: 'Marine Science',
       abstract: 'Using machine learning to map biodiversity changes at scale.',
       createdAt: now,
@@ -141,4 +153,6 @@ export const memoryStore = {
     },
   ],
   subscribers: [],
+  submissions: [],
+  reviewAssignments: [],
 }

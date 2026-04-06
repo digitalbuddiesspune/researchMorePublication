@@ -13,4 +13,9 @@ export const env = {
   PORT: Number(process.env.PORT || 5000),
   MONGO_URI: process.env.MONGO_URI || '',
   CORS_ORIGIN: parseCorsOrigins(process.env.CORS_ORIGIN),
+  JWT_SECRET: process.env.JWT_SECRET || 'change-me-in-production',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
+  ADMIN_SEED_NAME: process.env.ADMIN_SEED_NAME || '',
+  ADMIN_SEED_EMAIL: process.env.ADMIN_SEED_EMAIL || '',
+  ADMIN_SEED_PASSWORD: process.env.ADMIN_SEED_PASSWORD || '',
 }
