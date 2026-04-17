@@ -18,4 +18,8 @@ export const env = {
   ADMIN_SEED_NAME: process.env.ADMIN_SEED_NAME || '',
   ADMIN_SEED_EMAIL: process.env.ADMIN_SEED_EMAIL || '',
   ADMIN_SEED_PASSWORD: process.env.ADMIN_SEED_PASSWORD || '',
+  STAFF_SEED_NAME: process.env.STAFF_SEED_NAME || '',
+  STAFF_SEED_EMAIL: process.env.STAFF_SEED_EMAIL || '',
+  STAFF_SEED_PASSWORD: process.env.STAFF_SEED_PASSWORD || '',
+  STAFF_SEED_ROLE: process.env.STAFF_SEED_ROLE || 'editor',
 }

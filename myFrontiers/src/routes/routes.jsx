@@ -6,6 +6,7 @@ import ResourcesPage from '../pages/ResourcesPage.jsx'
 import CertificatesPage from '../pages/CertificatesPage.jsx'
 import InboxPage from '../pages/InboxPage.jsx'
 import SubmitResearchPage from '../pages/SubmitResearchPage.jsx'
+import LoginPage from '../pages/LoginPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: 'certificates', element: <CertificatesPage /> },
       { path: 'inbox', element: <InboxPage /> },
       { path: 'submit-research', element: <SubmitResearchPage /> },
+      { path: 'login', element: <LoginPage /> },
     ],
   },
 ])

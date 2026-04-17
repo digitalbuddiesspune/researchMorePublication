@@ -11,6 +11,7 @@ import { clearWebToken, fetchMe, getWebToken } from '../services/authService.js'
 
 const SITE_NAME = 'researchMorePublication'
 const NOTICE_REFRESH_MS = 15000
+const RESEARCH_MORE_URL = 'https://researchmore.vercel.app/'
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
@@ -134,6 +135,14 @@ export default function Header() {
     navigate('/login', { replace: true })
   }
 
+  const handleSubmitResearchClick = () => {
+    if (!currentUser) {
+      navigate('/login?next=/submit')
+      return
+    }
+    navigate('/submit', { state: { openManuscriptModal: true } })
+  }
+
   const headerClasses = onHero
     ? 'border-b border-transparent bg-transparent text-white'
     : 'border-b border-neutral-200 bg-white/90 text-neutral-900'
@@ -145,7 +154,6 @@ export default function Header() {
   const utilLinkClasses = onHero
     ? 'transition-colors hover:text-white text-white/80'
     : 'transition-colors hover:text-neutral-900 text-neutral-700'
-  const submitTarget = currentUser?.role === 'author' ? '/author/dashboard' : '/login?next=/author/dashboard'
 
   return (
     <header className={`fixed inset-x-0 top-0 z-20 backdrop-blur-sm transition-colors duration-300 ${headerClasses}`}>
@@ -183,15 +191,23 @@ export default function Header() {
           <Link to="/articles" className={navLinkClasses} onMouseEnter={() => setAboutOpen(false)}>
             All articles
           </Link>
-          <Link
-            to={submitTarget}
+          <button
+            type="button"
+            onClick={handleSubmitResearchClick}
             className="rounded-full bg-emerald-500 px-4 py-1.5 text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400"
           >
             Submit your research
-          </Link>
+          </button>
         </nav>
         <div className="flex items-center gap-2 text-sm font-medium sm:gap-5">
-          <button className={`hidden md:inline ${utilLinkClasses}`}>Search</button>
+          {currentUser ? (
+            <a
+              href={RESEARCH_MORE_URL}
+              className={`hidden rounded-full border border-current/40 px-3 py-1.5 md:inline ${utilLinkClasses}`}
+            >
+              Research More
+            </a>
+          ) : null}
           {currentUser ? (
             <div ref={profileMenuRef} className="relative hidden items-center gap-2 sm:flex">
               <button
@@ -384,6 +400,15 @@ export default function Header() {
             All articles
           </Link>
           {currentUser ? (
+            <a
+              href={RESEARCH_MORE_URL}
+              onClick={closeMobileMenu}
+              className="block w-full rounded-full border border-neutral-300 px-3 py-2 text-center text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+            >
+              Research More
+            </a>
+          ) : null}
+          {currentUser ? (
             <>
               <button
                 type="button"
@@ -415,13 +440,16 @@ export default function Header() {
               Login
             </Link>
           )}
-          <Link
-            to={submitTarget}
-            onClick={closeMobileMenu}
+          <button
+            type="button"
+            onClick={() => {
+              closeMobileMenu()
+              handleSubmitResearchClick()
+            }}
             className="mt-2 block w-full rounded-full bg-emerald-500 px-4 py-2 text-center text-sm font-semibold text-neutral-950 shadow-sm shadow-emerald-500/40 transition hover:bg-emerald-400"
           >
             Submit your research
-          </Link>
+          </button>
         </div>
       </div>
 

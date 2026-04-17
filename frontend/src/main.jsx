@@ -12,6 +12,13 @@ import CookiesPolicy from './pages/CookiesPolicy.jsx'
 import AllJournals from './pages/AllJournals.jsx'
 import AllArticles from './pages/AllArticles.jsx'
 import SubmitResearch from './pages/SubmitResearch.jsx'
+import SubmissionDetailsPage from './pages/submit/SubmissionDetailsPage.jsx'
+import ManuscriptInformationPage from './pages/submit/ManuscriptInformationPage.jsx'
+import RelatedFrontiersArticlePage from './pages/submit/RelatedFrontiersArticlePage.jsx'
+import ManuscriptSummaryInformationPage from './pages/submit/ManuscriptSummaryInformationPage.jsx'
+import AuthorsAndContributorsPage from './pages/submit/AuthorsAndContributorsPage.jsx'
+import EditorialPage from './pages/submit/EditorialPage.jsx'
+import StatementsPage from './pages/submit/StatementsPage.jsx'
 import JournalDetail from './pages/JournalDetail.jsx'
 import ArticleDetail from './pages/ArticleDetail.jsx'
 import AuthorDashboard from './pages/AuthorDashboard.jsx'
@@ -40,6 +47,16 @@ createRoot(document.getElementById('root')).render(
           <Route path="articles" element={<AllArticles />} />
           <Route path="articles/:id" element={<ArticleDetail />} />
           <Route path="submit" element={<SubmitResearch />} />
+          <Route path="submit/submission-details" element={<SubmissionDetailsPage />} />
+          <Route path="submit/manuscript-information" element={<ManuscriptInformationPage />} />
+          <Route path="submit/related-frontiers-article" element={<RelatedFrontiersArticlePage />} />
+          <Route
+            path="submit/manuscript-summary-information"
+            element={<ManuscriptSummaryInformationPage />}
+          />
+          <Route path="submit/authors-and-contributors" element={<AuthorsAndContributorsPage />} />
+          <Route path="submit/editorial" element={<EditorialPage />} />
+          <Route path="submit/statements" element={<StatementsPage />} />
           <Route path="author" element={<AuthorLayout />}>
             <Route path="dashboard" element={<AuthorDashboard />} />
             <Route path="submit" element={<AuthorSubmit />} />

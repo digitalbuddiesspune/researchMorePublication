@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import path from 'path'
 import { env } from './src/config/env.js'
 import { connectDatabase } from './src/config/db.js'
-import { seedAdminUser } from './src/seed/seedAdminUser.js'
+import { seedAdminUser, seedStaffUser } from './src/seed/seedAdminUser.js'
 import newsRouter from './src/routes/newsRoutes.js'
 import publicationRouter from './src/routes/publicationRoutes.js'
 import statsRouter from './src/routes/statsRoutes.js'
@@ -73,6 +73,7 @@ const startServer = async () => {
   const isConnected = await connectDatabase()
   if (isConnected) {
     await seedAdminUser()
+    await seedStaffUser()
   }
   const app = createApp()
 
